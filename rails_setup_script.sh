@@ -1,3 +1,27 @@
+#SETUP SCRIPT DOES THE FOLLOWING:
+# 1) Adds the following gems to Gemfile:
+#     - bootstrap
+#     - faker
+#     - simple_form
+#     - rails12factor
+#     - underscore
+#     - minitest-rails (including )
+#         for :development and :test groups
+#           - minitest-rails-capybara
+#           - minitest-reporters 
+#           - launchy
+#           
+# 2) Bundles gems
+# 
+# 
+# 3) Requires underscore in `application.js` magic comments 
+# 
+# 4) change filename : `application.css` to `application.scss`
+#           @import 'bootstrap' 
+#           @import 'bootstrap-sprockets'
+#           
+# 5) download boilerplate css and inject it into `application.scss` file         
+
 insert_after(){
   STRMATCH=$1
   PRINTVAL=$2
@@ -7,9 +31,11 @@ insert_after(){
 }
 
 echo "-------------------------"
-echo "New Project"
+echo "New Project -------------"
 echo "-------------------------"
-echo $1 "-------"
+
+echo "-------------------------"
+echo $1
 echo "-------------------------"
 
 #Sets up new rails project
@@ -24,16 +50,16 @@ cd $1
 
 #Add Standard Gems
 echo "gem 'faker'"  >> Gemfile
-echo "gem 'acts_as_follower'" >> Gemfile
 echo "gem 'simple_form'" >> Gemfile
 echo "gem 'bootstrap-sass', '~> 3.3.5'" >> Gemfile
 echo "gem 'rails_12factor'" >> Gemfile
-echo "gem 'underscore-rails" 
+echo "gem 'underscore-rails'" >> Gemfile
 
 
 # Add Minitest to the gemlist
 echo "gem 'minitest-rails'" >> Gemfile
 
+#  Adds minitest-rails addons to the :development and :test groups
 gemlist=(
   "  gem 'launchy'"
   "  gem 'minitest-reporters'" 
