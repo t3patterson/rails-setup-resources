@@ -88,4 +88,4 @@ echo "@import 'bootstrap-sprockets';" >> $CSS_PATH/application.scss
 echo "@import 'bootstrap';" >> $CSS_PATH/application.scss
 
 #boilerplate css
-curl https://raw.githubusercontent.com/t3patterson/resources/master/boilerplate.scss >> $CSS_PATH/application.scs
+curl https://raw.githubusercontent.com/t3patterson/resources/master/boilerplate.scss >> $CSS_PATH/application.scss
