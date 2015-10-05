@@ -1,4 +1,7 @@
 #SETUP SCRIPT DOES THE FOLLOWING:
+# 0) In command line `$ bash rsetup.sh`
+#     - Creates a new rails project w/ postgresql db by default
+#
 # 1) Adds the following gems to Gemfile:
 #     - bootstrap
 #     - faker
@@ -20,7 +23,8 @@
 #           @import 'bootstrap' 
 #           @import 'bootstrap-sprockets'
 #           
-# 5) download boilerplate css and inject it into `application.scss` file         
+# 5) download boilerplate css and inject it into `application.scss` file     
+# 
 
 insert_after(){
   STRMATCH=$1
@@ -39,7 +43,7 @@ echo $1
 echo "-------------------------"
 
 #Sets up new rails project
-rails new $1
+rails new $1 --database=postgresql
 
 #Define Paths from ROOT Directory
 JS_PATH="./app/assets/javascripts/"
