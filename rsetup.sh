@@ -52,16 +52,28 @@ CSS_PATH="./app/assets/stylesheets/"
 #Changes Into ROOT Directory for project
 cd $1
 
+#Activate Gems
+sed -i "" "s/# gem 'bcrypt/gem 'bcrypt/g" Gemfile
+sed -i "" "s/# gem 'therubyracer'/gem 'therubyracer'/g" Gemfile
+
+
 #Add Standard Gems
 echo "gem 'faker'"  >> Gemfile
 echo "gem 'simple_form'" >> Gemfile
 echo "gem 'bootstrap-sass', '~> 3.3.5'" >> Gemfile
 echo "gem 'rails_12factor'" >> Gemfile
 echo "gem 'underscore-rails'" >> Gemfile
+echo "gem 'react-rails', '~> 1.0'" >> Gemfile
+echo "gem 'refile', require: 'refile/rails'" >> Gemfile
+echo "gem 'refile-mini_magick'" >> Gemfile
+echo "gem 'refile-postgres'" >> Gemfile
+echo "gem 'kaminari'" >> Gemfile
 
 
 # Add Minitest to the gemlist
 echo "gem 'minitest-rails'" >> Gemfile
+
+
 
 #  Adds minitest-rails addons to the :development and :test groups
 gemlist=(
@@ -80,7 +92,12 @@ insert_after 'group :development, :test do' "$buildit"  ./Gemfile
 bundle install
 
 #add underscore to requires
-insert_after '\/\/= require jquery_ujs' "//= require underscore" $JS_PATH/application.js
+insert_after '\/\/= require turbolinks' "//= require moment" $JS_PATH/application.js
+insert_after '\/\/= require moment' "//= require react" $JS_PATH/application.js
+insert_after '\/\/= require react' "//= require react_ujs" $JS_PATH/application.js
+insert_after '\/\/= require react_ujs' "//= require components" $JS_PATH/application.js
+insert_after '\/\/= require turbolinks' "//= require underscore" $JS_PATH/application.js
+
 
 #Setup Bootstrap
 mv $CSS_PATH/application.css $CSS_PATH/application.scss
@@ -89,3 +106,11 @@ echo "@import 'bootstrap';" >> $CSS_PATH/application.scss
 
 #boilerplate css
 curl https://raw.githubusercontent.com/t3patterson/resources/master/boilerplate.scss >> $CSS_PATH/application.scss
+
+#install & configure react
+rails g react:install
+awk '/^end$/{print "  config.react.variant = :development"}1' ./config/environments/development.rb > ./temptemp.tmp && mv temptemp.tmp ./config/environments/development.rb
+awk '/^end$/{print "  config.react.variant = :production"}1' ./config/environments/production.rb > ./temptemp.tmp && mv temptemp.tmp ./config/environments/production.rb
+
+#install moment js
+curl 'https://raw.githubusercontent.com/moment/moment/develop/moment.js' >> ./vendor/assets/javascripts/moment.js
