@@ -64,11 +64,6 @@ echo "gem 'bootstrap-sass', '~> 3.3.5'" >> Gemfile
 echo "gem 'rails_12factor'" >> Gemfile
 echo "gem 'underscore-rails'" >> Gemfile
 echo "gem 'react-rails', '~> 1.0'" >> Gemfile
-echo "gem 'refile', require: 'refile/rails'" >> Gemfile
-echo "gem 'refile-mini_magick'" >> Gemfile
-echo "gem 'refile-postgres'" >> Gemfile
-echo "gem 'kaminari'" >> Gemfile
-
 
 # Add Minitest to the gemlist
 echo "gem 'minitest-rails'" >> Gemfile
@@ -92,11 +87,11 @@ insert_after 'group :development, :test do' "$buildit"  ./Gemfile
 bundle install
 
 #add underscore to requires
+insert_after '\/\/= require turbolinks' "//= require underscore" $JS_PATH/application.js
 insert_after '\/\/= require turbolinks' "//= require moment" $JS_PATH/application.js
-insert_after '\/\/= require moment' "//= require react" $JS_PATH/application.js
+# insert_after '\/\/= require moment' "//= require react" $JS_PATH/application.js
 insert_after '\/\/= require react' "//= require react_ujs" $JS_PATH/application.js
 insert_after '\/\/= require react_ujs' "//= require components" $JS_PATH/application.js
-insert_after '\/\/= require turbolinks' "//= require underscore" $JS_PATH/application.js
 
 
 #Setup Bootstrap
@@ -107,10 +102,10 @@ echo "@import 'bootstrap';" >> $CSS_PATH/application.scss
 #boilerplate css
 curl https://raw.githubusercontent.com/t3patterson/resources/master/boilerplate.scss >> $CSS_PATH/application.scss
 
+#Get moment
+curl https://raw.githubusercontent.com/moment/moment/develop/moment.js > ./vendor/assets/javascripts/moment.js
+
 #install & configure react
 rails g react:install
-awk '/^end$/{print "  config.react.variant = :development"}1' ./config/environments/development.rb > ./temptemp.tmp && mv temptemp.tmp ./config/environments/development.rb
-awk '/^end$/{print "  config.react.variant = :production"}1' ./config/environments/production.rb > ./temptemp.tmp && mv temptemp.tmp ./config/environments/production.rb
-
-#install moment js
-curl 'https://raw.githubusercontent.com/moment/moment/develop/moment.js' >> ./vendor/assets/javascripts/moment.js
+awk '/^end$/{print "\n  config.react.variant = :development"}1' ./config/environments/development.rb > ./temptemp.tmp && mv temptemp.tmp ./config/environments/development.rb
+awk '/^end$/{print "\n  config.react.variant = :production"}1' ./config/environments/production.rb > ./temptemp.tmp && mv temptemp.tmp ./config/environments/production.rb
