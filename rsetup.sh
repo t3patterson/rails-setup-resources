@@ -87,11 +87,12 @@ insert_after 'group :development, :test do' "$buildit"  ./Gemfile
 bundle install
 
 #add underscore to requires
-insert_after '\/\/= require turbolinks' "//= require underscore" $JS_PATH/application.js
+insert_after '\/\/= require turbolinks' "//= require components" $JS_PATH/application.js
+insert_after '\/\/= require turbolinks' "//= require react_ujs" $JS_PATH/application.js
+insert_after '\/\/= require turbolinks' "//= require react" $JS_PATH/application.js
+insert_after '\/\/= require turbolinks' "//= require bootstrap" $JS_PATH/application.js
 insert_after '\/\/= require turbolinks' "//= require moment" $JS_PATH/application.js
-# insert_after '\/\/= require moment' "//= require react" $JS_PATH/application.js
-insert_after '\/\/= require react' "//= require react_ujs" $JS_PATH/application.js
-insert_after '\/\/= require react_ujs' "//= require components" $JS_PATH/application.js
+insert_after '\/\/= require turbolinks' "//= require underscore" $JS_PATH/application.js
 
 
 #Setup Bootstrap
