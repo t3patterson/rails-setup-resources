@@ -52,9 +52,13 @@ CSS_PATH="./app/assets/stylesheets/"
 #Changes Into ROOT Directory for project
 cd $1
 
-#Activate Gems
+#Activate Gems: bcrypt, therubyracer, 
 sed -i "" "s/# gem 'bcrypt/gem 'bcrypt/g" Gemfile
 sed -i "" "s/# gem 'therubyracer'/gem 'therubyracer'/g" Gemfile
+sed -i "" "s/# gem 'jbuilder'/gem 'jbuilder'/g" Gemfile
+
+#Deactivate turbolinks
+sed -i "" "s/gem 'turbolinks'/# gem 'turbolinks'/g" Gemfile
 
 
 #Add Standard Gems
@@ -63,16 +67,26 @@ echo "gem 'simple_form'" >> Gemfile
 echo "gem 'bootstrap-sass', '~> 3.3.5'" >> Gemfile
 echo "gem 'rails_12factor'" >> Gemfile
 echo "gem 'underscore-rails'" >> Gemfile
+
+#Add React to the Gemlist
 echo "gem 'react-rails', '~> 1.0'" >> Gemfile
+
+#Add refile to the gemlist
+echo "gem 'refile', require: 'refile/rails'" >> Gemfile
+echo "gem 'refile-mini_magick'" >> Gemfile
+echo "gem 'refile-postgres'" >> Gemfile
+
+#Add payola & figaro
+echo "gem 'payola-payments'" >> Gemfile
+echo "gem 'figaro'" >> Gemfile
+
 
 # Add Minitest to the gemlist
 echo "gem 'minitest-rails'" >> Gemfile
 
-
-
 #  Adds minitest-rails addons to the :development and :test groups
 gemlist=(
-  "  gem 'launchy'"
+  "  gem 'pry'"
   "  gem 'minitest-reporters'" 
   "  gem 'minitest-rails-capybara'" 
 )
