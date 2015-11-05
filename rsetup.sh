@@ -124,3 +124,15 @@ curl https://raw.githubusercontent.com/moment/moment/develop/moment.js > ./vendo
 rails g react:install
 awk '/^end$/{print "\n  config.react.variant = :development"}1' ./config/environments/development.rb > ./temptemp.tmp && mv temptemp.tmp ./config/environments/development.rb
 awk '/^end$/{print "\n  config.react.variant = :production"}1' ./config/environments/production.rb > ./temptemp.tmp && mv temptemp.tmp ./config/environments/production.rb
+
+#setup the database
+rake db:create
+
+#initializers/migration for refile
+rails g refile:postgres:migration
+rails g refile:postgres:initializers
+
+#setting up payola
+rails g payola:install
+
+rake db:migrate
