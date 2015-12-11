@@ -69,7 +69,7 @@ echo "gem 'rails_12factor'" >> Gemfile
 echo "gem 'underscore-rails'" >> Gemfile
 
 #Add React to the Gemlist
-echo "gem 'react-rails', '~> 1.0'" >> Gemfile
+echo "gem 'react-rails', '~> 1.5.0'" >> Gemfile
 
 #Add refile to the gemlist
 echo "gem 'refile', require: 'refile/rails'" >> Gemfile
@@ -99,40 +99,92 @@ done
 insert_after 'group :development, :test do' "$buildit"  ./Gemfile
 
 bundle install
+# Configure Magic comments
 
-#add underscore to requires
-insert_after '\/\/= require turbolinks' "//= require components" $JS_PATH/application.js
-insert_after '\/\/= require turbolinks' "//= require react_ujs" $JS_PATH/application.js
-insert_after '\/\/= require turbolinks' "//= require react" $JS_PATH/application.js
-insert_after '\/\/= require turbolinks' "//= require bootstrap" $JS_PATH/application.js
-insert_after '\/\/= require turbolinks' "//= require moment" $JS_PATH/application.js
-insert_after '\/\/= require turbolinks' "//= require underscore" $JS_PATH/application.js
+JS_PATH="./app/assets/javascripts/"
+CSS_PATH="./app/assets/stylesheets/"
 
+########
+###add magic comments to requires
+########
 
-#Setup Bootstrap
+sed '\/\/= require turbolinks/a\
+//= require components
+' $JS_PATH/application.js > $JS_PATH/application2.js;
+mv $JS_PATH/application2.js $JS_PATH/application.js;
+
+sed '\/\/= require turbolinks/a\
+//= require react_ujs
+# ' $JS_PATH/application.js > $JS_PATH/application2.js;
+mv $JS_PATH/application2.js $JS_PATH/application.js;
+
+sed '\/\/= require turbolinks/a\
+//= require react
+# ' $JS_PATH/application.js > $JS_PATH/application2.js;
+mv $JS_PATH/application2.js $JS_PATH/application.js;
+
+sed '\/\/= require turbolinks/a\
+//= require bootstrap
+# ' $JS_PATH/application.js > $JS_PATH/application2.js;
+mv $JS_PATH/application2.js $JS_PATH/application.js;
+
+sed '\/\/= require turbolinks/a\
+//= require moment
+# ' $JS_PATH/application.js > $JS_PATH/application2.js;
+mv $JS_PATH/application2.js $JS_PATH/application.js;
+
+sed '\/\/= require turbolinks/a\
+//= require underscore
+# ' $JS_PATH/application.js > $JS_PATH/application2.js;
+mv $JS_PATH/application2.js $JS_PATH/application.js;
+
+########
+###Setup Bootstrap
+########
 mv $CSS_PATH/application.css $CSS_PATH/application.scss
 echo "@import 'bootstrap-sprockets';" >> $CSS_PATH/application.scss
 echo "@import 'bootstrap';" >> $CSS_PATH/application.scss
 
-#boilerplate css
-curl https://raw.githubusercontent.com/t3patterson/resources/master/boilerplate.scss >> $CSS_PATH/application.scss
-
-#Get moment
-curl https://raw.githubusercontent.com/moment/moment/develop/moment.js > ./vendor/assets/javascripts/moment.js
-
+########
 #install & configure react
+########
 rails g react:install
+
 awk '/^end$/{print "\n  config.react.variant = :development"}1' ./config/environments/development.rb > ./temptemp.tmp && mv temptemp.tmp ./config/environments/development.rb
 awk '/^end$/{print "\n  config.react.variant = :production"}1' ./config/environments/production.rb > ./temptemp.tmp && mv temptemp.tmp ./config/environments/production.rb
 
-#setup the database
+########
+#####setup the database
+########
 rake db:create
 
-#initializers/migration for refile
-rails g refile:postgres:migration
-rails g refile:postgres:initializers
+########
+#initializers/migration file for refile
+########
+# rails g refile:postgres:migration
+# rails g refile:postgres:initializers
 
-#setting up payola
-rails g payola:install
+########
+#payola initializer
+######### 
+# rails g payola:install
 
+
+########
+#rake db
+########
 rake db:migrate
+
+#########
+###boilerplate css
+######### 
+echo "downloading boilerplate css..."
+curl https://raw.githubusercontent.com/t3patterson/rails-setup-resources/master/boilerplate.scss >> $CSS_PATH/application.scss
+
+########
+###JS-momentjs
+######### 
+echo "downloading momentjs"
+curl http://momentjs.com/downloads/moment.min.js > ./vendor/assets/javascripts/moment.min.js
+
+# echo "...css & js downloads complete"
